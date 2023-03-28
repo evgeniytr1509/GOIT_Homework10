@@ -1,5 +1,4 @@
 from collections import UserDict
-address_book = {} # create global variable
 
 class Field:
     def __init__(self, value=None):
@@ -48,6 +47,8 @@ class AddressBook(UserDict):
                 found_records.append(self.data[key])
         return found_records
 
+address_book = AddressBook()# create global variable
+
 def input_error(func):
     def inner(*args, **kwargs):
         try:
@@ -66,7 +67,7 @@ def hello():
         - To exit the program input <<<exit>>> or <<<bye>>>""")
 
 @input_error
-def add_contact(address_book, name, phone):
+def add_contact(name, phone):
     #global address_book
     name_field = Name(name)
     if name_field.value in address_book:
@@ -81,7 +82,7 @@ def add_contact(address_book, name, phone):
     return address_book
 
 @input_error
-def find_contact(address_book, name):
+def find_contact(name):
     #global address_book
     name_field = Name(name)
     found_records = address_book.find_records(name_field.value)
@@ -92,7 +93,7 @@ def find_contact(address_book, name):
         print(f"No records found for {name}")
 
 @input_error
-def update_contact(address_book, name, phone):
+def update_contact(name, phone):
     name_field = Name(name)
     if name_field.__value in address_book:
         record = address_book[name_field.value]
@@ -106,7 +107,7 @@ def update_contact(address_book, name, phone):
     return address_book
 
 @input_error
-def show_all_contacts(address_book):
+def show_all_contacts():
     
     if len(address_book.data) == 0:  
         print("No contacts found")
@@ -119,24 +120,24 @@ def show_all_contacts(address_book):
 
 def parse_command(command):
     #global address_book
-    address_book = AddressBook() # обновление address_book
+    # address_book = AddressBook() # обновление address_book
     parts = command.split()
     if parts[0] == "hello":
         hello()
     elif parts[0] == "add":
         if len(parts) < 3:
             raise IndexError
-        add_contact(address_book, parts[1], parts[2])
+        add_contact(parts[1], parts[2])
     elif parts[0] == "find":
         if len(parts) < 2:
             raise IndexError
-        find_contact(address_book, parts[1])
+        find_contact(parts[1])
     elif parts[0] == "update":
         if len(parts) < 3:
             raise IndexError
-        update_contact(address_book, parts[1], parts[2])
+        update_contact(parts[1], parts[2])
     elif parts[0] == "show":
-        show_all_contacts(address_book)
+        show_all_contacts()
     else:
         print("Invalid command")
         

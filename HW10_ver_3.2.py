@@ -47,13 +47,16 @@ class AddressBook(UserDict):
                 found_records.append(self.data[key])
         return found_records
 
+address_book = AddressBook()
+
 def input_error(func):
     def inner(*args, **kwargs):
         try:
             return func(*args, **kwargs)
         except KeyError:
             print("Name not found in contacts")
-    
+        except IndexError:
+            print("Not enough param for commands. Call help")
     return inner
 
 def hello():
@@ -113,8 +116,8 @@ def show_all_contacts(address_book):
             record = address_book.data[name]  
             print(f"{record.name.value}: {', '.join(str(phone) for phone in record.phones)}")
 
+@input_error
 def parse_command(command):
-    address_book = AddressBook()
     parts = command.split()
     if parts[0] == "hello":
         hello()
